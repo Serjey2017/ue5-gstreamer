@@ -5,10 +5,10 @@ public class GStreamer : ModuleRules
 {
     public GStreamer(ReadOnlyTargetRules Target) : base(Target)
     {
-        DefaultBuildSettings = BuildSettingsVersion.V2;
-        PCHUsage = PCHUsageMode.NoPCHs; // UseExplicitOrSharedPCHs;
+        DefaultBuildSettings = BuildSettingsVersion.V5;
+        PCHUsage = PCHUsageMode.NoPCHs;
         bUseUnity = false;
-        bEnableUndefinedIdentifierWarnings = false;
+        CppCompileWarningSettings.UndefinedIdentifierWarningLevel = WarningLevel.Off;
 
         PublicDependencyModuleNames.AddRange(
             new string[] {
@@ -25,7 +25,15 @@ public class GStreamer : ModuleRules
 
         if (Target.Platform == UnrealTargetPlatform.Win64)
         {
-            const string GStreamerRoot = @"C:\dev\gstreamer_dev\1.0\msvc_x86_64"; // path to gstreamer development package
+            string GStreamerRoot =
+                System.Environment.GetEnvironmentVariable("GSTREAMER_1_0_ROOT_MSVC_X86_64") ??
+                System.Environment.GetEnvironmentVariable("GSTREAMER_ROOT_X86_64") ??
+                System.Environment.GetEnvironmentVariable("GSTREAMER_ROOT");
+
+            if (string.IsNullOrEmpty(GStreamerRoot))
+                throw new System.Exception("GStreamer not found. Install GStreamer and set GSTREAMER_1_0_ROOT_MSVC_X86_64.");
+
+            GStreamerRoot = GStreamerRoot.TrimEnd('\\', '/');
 
             PrivateIncludePaths.Add(Path.Combine(GStreamerRoot, "include"));
             PrivateIncludePaths.Add(Path.Combine(GStreamerRoot, "include", "gstreamer-1.0"));

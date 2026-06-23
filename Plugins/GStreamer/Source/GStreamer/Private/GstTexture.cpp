@@ -100,10 +100,11 @@ void FGstTexture::RenderCmd_UpdateTexture(IGstSample* Sample)
 	SCOPED_PROFILER;
 
 	auto Tex = GetTextureObject();
-	if (Tex && Tex->Resource)
+	FTextureResource* TexResource = Tex ? Tex->GetResource() : nullptr;
+	if (TexResource)
 	{
 		RHIUpdateTexture2D(
-			Tex->Resource->GetTexture2DRHI(),
+			TexResource->GetTexture2DRHI(),
 			0,
 			FUpdateTextureRegion2D(0, 0, 0, 0, Sample->GetWidth(), Sample->GetHeight()),
 			m_Pitch,

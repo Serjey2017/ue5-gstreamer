@@ -2,6 +2,7 @@
 #include "GstPipelineImpl.h"
 #include "Engine/TextureRenderTarget2D.h"
 #include "Components/SceneCaptureComponent2D.h"
+#include "TextureResource.h"
 
 class FGstAppSrcBuffer : public IGstAppSrcBuffer
 {
